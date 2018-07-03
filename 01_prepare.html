@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<div id="test">尚硅谷IT教育</div>
+
+<ul id="fragment_test">
+  <li>test1</li>
+  <li>test2</li>
+  <li>test3</li>
+</ul>
+
+
+<!--
+1. [].slice.call(lis): 将伪数组转换为真数组
+2. node.nodeType: 得到节点类型
+3. Object.defineProperty(obj, propertyName, {}): 给对象添加属性(指定描述符)
+4. Object.keys(obj): 得到对象自身可枚举属性组成的数组
+5. obj.hasOwnProperty(prop): 判断prop是否是obj自身的属性
+6. DocumentFragment: 文档碎片(高效批量更新多个节点)
+-->
+
+<script type="text/javascript">
+//  <!--获取对象自身的属性组成数组-->
+//  const fragment=document.getElementById('fragment_test')
+//  const lis=Array.prototype.slice.call(fragment.children)
+//  console.log(lis)
+
+
+//将伪数组转换为真数组
+  const liList=document.querySelectorAll('li')
+//  console.log(liList instanceof Array,liList.forEach)
+  const lis2=Array.prototype.slice.call(liList)
+  console.log(lis2 instanceof Array)
+
+  //node.nodeType:得到节点类型
+  const elementNode=document.getElementById('test')
+  const attrNode=elementNode.getAttributeNode('id')
+  const textNode=elementNode.firstChild //这里是空格
+  console.log(elementNode.nodeType,attrNode.nodeType,textNode.nodeType) //1是标签元素节点  2属性节点   3文本节点
+
+
+//Object.defineProperty(obj, propertyName, {}): 给对象添加属性(指定描述符)
+  const p={
+    first:'A',
+    last:'B'
+  }
+  Object.defineProperty(p,'full',{ //属性描述符
+    //数据描述符
+    configurable:false,   //是否可以重新定义
+    enumerable:false, //是否可被枚举，看是否可被枚举主要是看是否可被遍历到
+//    value:'cc', //p.full 属性的值
+//    writable:true,  //value是否可以被修改
+
+    //存取描述符
+    get(){
+      return this.first+'-'+this.last
+    },
+    set(value){   //改变了full属性值的时候会触发
+      const vals=value.split('-')
+      this.first=vals[0]
+      this.last=vals[1]
+    }
+  })
+
+  console.log(p.full)
+  p.full='C-D'
+  console.log(p.first,p.last)
+
+//4. Object.keys(obj): 得到对象自身可枚举属性组成的数组
+  console.log(Object.keys(p))
+
+//5. obj.hasOwnProperty(prop): 判断prop是否是obj自身的属性
+  console.log(p.hasOwnProperty('full'))
+
+//6. DocumentFragment: 文档碎片(高效批量更新多个节点)*/
+//  内存节点的容器对象
+/*<ul id="fragment_test">
+  <li>test1</li>
+  <li>test2</li>
+  <li>test3</li>
+</ul>*/
+  const fragment=document.createDocumentFragment()
+  const ul=document.getElementById('fragment_test')
+
+  let child
+  while(child=ul.firstChild){  //一个子节点只能有一个父节点
+    fragment.appendChild(child) //将节点塞到内存fragment中
+  }
+
+  [].slice.call(fragment.childNodes).forEach(node=>{
+    if(node.nodeType===1){
+      node.textContent='atguigu'  //这部分修改的时候页面上不会发生任何变化，因为这是在内存中
+    }
+  })
+  //将fragment添加到ul中
+  ul.appendChild(fragment)
+
+
+
+
+</script>
+</body>
+</html>

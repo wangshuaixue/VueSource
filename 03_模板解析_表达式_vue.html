@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>03_模板解析_表达式_vue</title>
+</head>
+<body>
+<!--这里name是表达式-->
+<div id="demo">
+  <p>{{name}}</p>
+</div>
+
+<script type="text/javascript" src="./js/mvvm/compile.js"></script>
+<script type="text/javascript" src="./js/mvvm/observer.js"></script>
+<script type="text/javascript" src="./js/mvvm/watcher.js"></script>
+<script type="text/javascript" src="./js/mvvm/mvvm.js"></script>
+<script type="text/javascript">
+    const vm=new MVVM({
+      el:'#demo',
+      data:{
+        name:'damu'
+      }
+    })
+
+  var  obj={
+     name:'aaa',
+     bb:function () {
+       console.log(this)
+     }
+  }
+  obj.abc=function () {
+    console.log(this)
+  }
+  obj.bb()
+
+
+</script>
+
+</body>
+</html>
